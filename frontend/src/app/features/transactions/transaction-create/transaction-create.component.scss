@@ -1,0 +1,195 @@
+.transaction-create-container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+mat-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  mat-card-header {
+    margin-bottom: 2rem;
+    
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1976d2;
+      
+      mat-icon { font-size: 1.5rem; }
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  
+  mat-spinner { margin-bottom: 1rem; }
+  p { color: #666; font-style: italic; }
+}
+
+.no-cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  
+  mat-icon {
+    font-size: 4rem;
+    color: #ff9800;
+    margin-bottom: 1rem;
+  }
+  
+  h3 { color: #666; margin-bottom: 1rem; }
+  p { color: #999; margin-bottom: 2rem; max-width: 400px; }
+}
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  .full-width { width: 100%; }
+}
+
+.card-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0;
+  
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    
+    .card-holder {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .card-pan {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      color: #666;
+    }
+  }
+  
+  mat-chip { font-size: 0.75rem; }
+}
+
+.selected-card-preview {
+  margin: 1rem 0;
+  
+  mat-card {
+    background-color: #f8f9fa;
+    border: 2px solid #1976d2;
+    
+    mat-card-header {
+      mat-card-title {
+        color: #1976d2;
+        font-size: 1.1rem;
+      }
+      
+      mat-card-subtitle {
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.transaction-summary {
+  margin: 1rem 0;
+  
+  .summary-card {
+    background-color: #f8f9fa;
+    border-left: 4px solid #4caf50;
+    
+    mat-card-header mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #4caf50;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  
+  &:last-child { border-bottom: none; }
+  
+  .label {
+    font-weight: 500;
+    color: #666;
+    min-width: 100px;
+  }
+  
+  .value {
+    flex: 1;
+    text-align: right;
+    
+    &.amount {
+      font-weight: 600;
+      color: #2e7d32;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  
+  button {
+    min-width: 150px;
+    
+    &[color="primary"] {
+      background-color: #1976d2;
+      
+      &:disabled { background-color: #ccc; }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .transaction-create-container { padding: 0.5rem; }
+  
+  .card-option {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    
+    .value { text-align: left; }
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    button { width: 100%; }
+  }
+}

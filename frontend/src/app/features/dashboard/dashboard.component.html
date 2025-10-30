@@ -1,0 +1,238 @@
+<!-- Header del Dashboard -->
+<div class="dashboard-header">
+  <div class="header-content">
+    <h1>
+      <mat-icon>dashboard</mat-icon>
+      Dashboard del Sistema
+    </h1>
+    <div class="header-actions">
+      <div class="last-updated" *ngIf="lastUpdated">
+        <mat-icon>schedule</mat-icon>
+        Última actualización: {{ lastUpdated | date:'short' }}
+      </div>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="refreshData()"
+              [disabled]="isLoading">
+        <mat-icon [class.spinning]="isLoading">refresh</mat-icon>
+        {{ isLoading ? 'Actualizando...' : 'Actualizar' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Error Message -->
+<mat-card *ngIf="error" class="error-card">
+  <mat-card-content>
+    <div class="error-content">
+      <mat-icon color="warn">error</mat-icon>
+      <div>
+        <h3>Error al cargar datos</h3>
+        <p>{{ error }}</p>
+        <button mat-button color="primary" (click)="refreshData()">
+          Reintentar
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- Loading Spinner -->
+<div *ngIf="isLoading && !stats$.value" class="loading-container">
+  <mat-spinner diameter="50"></mat-spinner>
+  <p>Cargando datos del dashboard...</p>
+</div>
+
+<!-- Dashboard Content -->
+<div *ngIf="stats$.value as stats" class="dashboard-content">
+  
+  <!-- Estadísticas principales -->
+  <div class="stats-grid">
+    <!-- Estadísticas de Tarjetas -->
+    <mat-card class="stat-card cards-total">
+      <mat-card-header>
+        <div mat-card-avatar class="stat-avatar cards">
+          <mat-icon>{{ getStatsIcon('totalCards') }}</mat-icon>
+        </div>
+        <mat-card-title>Tarjetas</mat-card-title>
+        <mat-card-subtitle>Total del sistema</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.totalCards }}</div>
+        <div class="stat-breakdown">
+          <div class="stat-item enrolled">
+            <mat-icon>{{ getStatsIcon('enrolledCards') }}</mat-icon>
+            <span>{{ stats.enrolledCards }} Activas</span>
+          </div>
+          <div class="stat-item created">
+            <mat-icon>{{ getStatsIcon('createdCards') }}</mat-icon>
+            <span>{{ stats.createdCards }} Creadas</span>
+          </div>
+          <div class="stat-item inactive">
+            <mat-icon>{{ getStatsIcon('inactiveCards') }}</mat-icon>
+            <span>{{ stats.inactiveCards }} Inactivas</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Estadísticas de Transacciones -->
+    <mat-card class="stat-card transactions-total">
+      <mat-card-header>
+        <div mat-card-avatar class="stat-avatar transactions">
+          <mat-icon>{{ getStatsIcon('totalTransactions') }}</mat-icon>
+        </div>
+        <mat-card-title>Transacciones</mat-card-title>
+        <mat-card-subtitle>Total procesadas</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.totalTransactions }}</div>
+        <div class="stat-breakdown">
+          <div class="stat-item approved">
+            <mat-icon>{{ getStatsIcon('approvedTransactions') }}</mat-icon>
+            <span>{{ stats.approvedTransactions }} Aprobadas</span>
+          </div>
+          <div class="stat-item cancelled">
+            <mat-icon>{{ getStatsIcon('cancelledTransactions') }}</mat-icon>
+            <span>{{ stats.cancelledTransactions }} Canceladas</span>
+          </div>
+          <div class="stat-item rejected">
+            <mat-icon>{{ getStatsIcon('rejectedTransactions') }}</mat-icon>
+            <span>{{ stats.rejectedTransactions }} Rechazadas</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Monto Total -->
+    <mat-card class="stat-card amount-total">
+      <mat-card-header>
+        <div mat-card-avatar class="stat-avatar amount">
+          <mat-icon>{{ getStatsIcon('totalAmount') }}</mat-icon>
+        </div>
+        <mat-card-title>Monto Total</mat-card-title>
+        <mat-card-subtitle>Transacciones aprobadas</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ formatAmount(stats.totalAmount) }}</div>
+        <div class="stat-subtitle" *ngIf="stats.avgTransactionAmount > 0">
+          Promedio: {{ formatAmount(stats.avgTransactionAmount) }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div class="main-content-grid">
+    
+    <!-- Actividad Reciente -->
+    <mat-card class="recent-activity">
+      <mat-card-header>
+        <div mat-card-avatar class="activity-avatar">
+          <mat-icon>timeline</mat-icon>
+        </div>
+        <mat-card-title>Actividad Reciente</mat-card-title>
+        <mat-card-subtitle>Últimas acciones del sistema</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="(recentActivity$ | async)?.length === 0" class="no-data">
+          <mat-icon>info</mat-icon>
+          <p>No hay actividad reciente</p>
+        </div>
+        
+        <div class="activity-timeline">
+          <div *ngFor="let activity of recentActivity$ | async" class="activity-item">
+            <div class="activity-icon">
+              <mat-icon [class]="getActivityStatusClass(activity)">
+                {{ getActivityIcon(activity) }}
+              </mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title">{{ activity.action }}</div>
+              <div class="activity-description">{{ activity.description }}</div>
+              <div class="activity-time">{{ getRelativeTime(activity.timestamp) }}</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tarjetas Recientes -->
+    <mat-card class="recent-cards">
+      <mat-card-header>
+        <div mat-card-avatar class="cards-avatar">
+          <mat-icon>credit_card</mat-icon>
+        </div>
+        <mat-card-title>Tarjetas Recientes</mat-card-title>
+        <mat-card-subtitle>Últimas 5 tarjetas</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="(recentCards$ | async)?.length === 0" class="no-data">
+          <mat-icon>info</mat-icon>
+          <p>No hay tarjetas registradas</p>
+        </div>
+        
+        <div *ngFor="let card of recentCards$ | async" class="recent-item">
+          <div class="item-icon">
+            <mat-icon [class]="'card-type-' + card.cardType.toLowerCase()">credit_card</mat-icon>
+          </div>
+          <div class="item-content">
+            <div class="item-title">{{ card.holderName }}</div>
+            <div class="item-subtitle">{{ card.maskedPan || maskPan(card.identifier) }}</div>
+            <div class="item-meta">{{ card.cardType }} • {{ card.createdAt | date:'short' }}</div>
+          </div>
+          <div class="item-status">
+            <span class="status-chip" [class]="getCardStatusClass(card.status)">
+              {{ card.status }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button routerLink="/cards" color="primary">
+          <mat-icon>arrow_forward</mat-icon>
+          Ver todas las tarjetas
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Transacciones Recientes -->
+    <mat-card class="recent-transactions">
+      <mat-card-header>
+        <div mat-card-avatar class="transactions-avatar">
+          <mat-icon>receipt</mat-icon>
+        </div>
+        <mat-card-title>Transacciones Recientes</mat-card-title>
+        <mat-card-subtitle>Últimas 5 transacciones</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="(recentTransactions$ | async)?.length === 0" class="no-data">
+          <mat-icon>info</mat-icon>
+          <p>No hay transacciones registradas</p>
+        </div>
+        
+        <div *ngFor="let transaction of recentTransactions$ | async" class="recent-item">
+          <div class="item-icon">
+            <mat-icon [class]="getTransactionStatusClass(transaction.status)">payment</mat-icon>
+          </div>
+          <div class="item-content">
+            <div class="item-title">{{ formatAmount(transaction.totalAmount) }}</div>
+            <div class="item-subtitle">{{ transaction.purchaseAddress }}</div>
+            <div class="item-meta">{{ transaction.referenceNumber }} • {{ transaction.createdAt | date:'short' }}</div>
+          </div>
+          <div class="item-status">
+            <span class="status-chip" [class]="getTransactionStatusClass(transaction.status)">
+              {{ transaction.status }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button routerLink="/transactions" color="primary">
+          <mat-icon>arrow_forward</mat-icon>
+          Ver todas las transacciones
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

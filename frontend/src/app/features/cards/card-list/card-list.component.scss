@@ -1,0 +1,162 @@
+.card-list-container {
+  padding: 1rem;
+  
+  mat-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #1976d2;
+        
+        mat-icon {
+          font-size: 1.5rem;
+        }
+      }
+      
+      .header-actions {
+        button {
+          mat-icon {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+    
+    .filters-section {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      
+      mat-form-field {
+        min-width: 200px;
+        flex: 1;
+      }
+    }
+    
+    .table-container {
+      overflow: auto;
+      
+      .cards-table {
+        width: 100%;
+        
+        .pan-display {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          
+          mat-icon {
+            font-size: 1.2rem;
+            color: #666;
+            
+            &.credit_card {
+              color: #1976d2;
+            }
+            
+            &.payment {
+              color: #388e3c;
+            }
+          }
+          
+          .pan-masked {
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+          }
+        }
+        
+        .actions-buttons {
+          display: flex;
+          gap: 0.25rem;
+          
+          button {
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.04);
+            }
+          }
+        }
+        
+        mat-chip-set {
+          mat-chip {
+            font-size: 0.75rem;
+            
+            &[color="primary"] {
+              background-color: #1976d2;
+              color: white;
+            }
+            
+            &[color="accent"] {
+              background-color: #388e3c;
+              color: white;
+            }
+            
+            &[color="success"] {
+              background-color: #4caf50;
+              color: white;
+            }
+            
+            &[color="warning"] {
+              background-color: #ff9800;
+              color: white;
+            }
+            
+            &[color="danger"] {
+              background-color: #f44336;
+              color: white;
+            }
+          }
+        }
+      }
+      
+      mat-paginator {
+        margin-top: 1rem;
+      }
+    }
+    
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      
+      mat-spinner {
+        margin-bottom: 1rem;
+      }
+      
+      p {
+        color: #666;
+        font-style: italic;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .card-list-container {
+    padding: 0.5rem;
+    
+    .filters-section {
+      flex-direction: column;
+      
+      mat-form-field {
+        min-width: 100%;
+      }
+    }
+    
+    .cards-table {
+      font-size: 0.875rem;
+      
+      .actions-buttons {
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+# PERFIL DEV - MySQL local
+spring:
+  # Configuración de base de datos MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/credibanco_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: credibanco
+    password: credibanco1234*
+  
+  # JPA Configuration para MySQL
+  jpa:
+    hibernate:
+      ddl-auto: update  # Actualiza el esquema automáticamente
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+# Logging para desarrollo
+logging:
+  level:
+    com.credibanco.cardsystem: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    root: INFO

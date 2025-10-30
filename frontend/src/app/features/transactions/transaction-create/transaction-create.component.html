@@ -1,0 +1,145 @@
+<div class="transaction-create-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>add_box</mat-icon>
+        Crear Nueva Transacción
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div *ngIf="isLoadingCards" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando tarjetas disponibles...</p>
+      </div>
+
+      <div *ngIf="!isLoadingCards && availableCards.length === 0" class="no-cards-container">
+        <mat-icon>warning</mat-icon>
+        <h3>No hay tarjetas disponibles</h3>
+        <p>Para crear una transacción, necesita al menos una tarjeta enrolada.</p>
+        <button mat-raised-button color="primary" routerLink="/cards/create">
+          <mat-icon>add_card</mat-icon>
+          Crear nueva tarjeta
+        </button>
+      </div>
+
+      <form *ngIf="!isLoadingCards && availableCards.length > 0" 
+            [formGroup]="transactionForm" 
+            (ngSubmit)="onSubmit()" 
+            class="transaction-form">
+        
+        <!-- Selección de tarjeta -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleccionar Tarjeta</mat-label>
+          <mat-select formControlName="cardIdentifier">
+            <mat-option *ngFor="let card of availableCards" [value]="card.identifier">
+              <div class="card-option">
+                <div class="card-info">
+                  <span class="card-holder">{{ card.holderName }}</span>
+                  <span class="card-pan">{{ card.maskedPan || maskPan(card.identifier || '') }}</span>
+                </div>
+                <mat-chip [color]="card.cardType === 'CREDIT' ? 'primary' : 'accent'">
+                  {{ card.cardType === 'CREDIT' ? 'Crédito' : 'Débito' }}
+                </mat-chip>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-hint>Solo se muestran tarjetas enroladas</mat-hint>
+          <mat-error *ngIf="transactionForm.get('cardIdentifier')?.invalid && transactionForm.get('cardIdentifier')?.touched">
+            {{ getErrorMessage('cardIdentifier') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Vista previa de la tarjeta seleccionada -->
+        <div *ngIf="getSelectedCard()" class="selected-card-preview">
+          <mat-card>
+            <mat-card-header>
+              <mat-icon mat-card-avatar>credit_card</mat-icon>
+              <mat-card-title>{{ getSelectedCard()?.holderName }}</mat-card-title>
+              <mat-card-subtitle>{{ maskPan(getSelectedCard()?.pan || '') }}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        
+        <!-- Monto total -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Monto Total</mat-label>
+          <input matInput 
+                 formControlName="totalAmount" 
+                 placeholder="0.00"
+                 type="number"
+                 step="0.01"
+                 min="0.01">
+          <span matPrefix>$&nbsp;</span>
+          <span matSuffix>COP</span>
+          <mat-hint>Ingrese el monto de la transacción</mat-hint>
+          <mat-error *ngIf="transactionForm.get('totalAmount')?.invalid && transactionForm.get('totalAmount')?.touched">
+            {{ getErrorMessage('totalAmount') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Dirección de compra -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección de Compra</mat-label>
+          <textarea matInput 
+                    formControlName="purchaseAddress" 
+                    placeholder="Tienda ABC, Calle 123 #45-67, Bogotá"
+                    rows="3"
+                    maxlength="200">
+          </textarea>
+          <mat-hint align="end">
+            {{ transactionForm.get('purchaseAddress')?.value?.length || 0 }}/200
+          </mat-hint>
+          <mat-error *ngIf="transactionForm.get('purchaseAddress')?.invalid && transactionForm.get('purchaseAddress')?.touched">
+            {{ getErrorMessage('purchaseAddress') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Resumen de la transacción -->
+        <div *ngIf="transactionForm.valid" class="transaction-summary">
+          <mat-card class="summary-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>summarize</mat-icon>
+                Resumen de la Transacción
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="summary-item">
+                <span class="label">Tarjeta:</span>
+                <span class="value">{{ getSelectedCard()?.holderName }} ({{ maskPan(getSelectedCard()?.pan || '') }})</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Monto:</span>
+                <span class="value amount">{{ transactionForm.get('totalAmount')?.value | currency:'COP':'symbol':'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Dirección:</span>
+                <span class="value">{{ transactionForm.get('purchaseAddress')?.value }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button mat-raised-button 
+                  type="button" 
+                  (click)="onCancel()"
+                  [disabled]="isLoading">
+            Cancelar
+          </button>
+          
+          <button mat-raised-button 
+                  color="primary" 
+                  type="submit"
+                  [disabled]="isLoading || transactionForm.invalid">
+            <mat-icon *ngIf="isLoading">refresh</mat-icon>
+            <mat-icon *ngIf="!isLoading">payment</mat-icon>
+            {{ isLoading ? 'Procesando...' : 'Crear Transacción' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

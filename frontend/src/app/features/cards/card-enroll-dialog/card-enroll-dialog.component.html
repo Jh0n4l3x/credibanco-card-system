@@ -1,0 +1,66 @@
+<div class="enroll-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>credit_card</mat-icon>
+    Activar Tarjeta
+  </h2>
+
+  <div mat-dialog-content>
+    <div class="card-info">
+      <h3>Información de la Tarjeta</h3>
+      <div class="card-details">
+        <div class="detail-row">
+          <span class="label">Titular:</span>
+          <span class="value">{{ data.card.holderName }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Número:</span>
+          <span class="value">{{ getMaskedPan() }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Tipo:</span>
+          <span class="value">
+            <mat-chip [color]="data.card.cardType === 'CREDIT' ? 'primary' : 'accent'">
+              {{ data.card.cardType === 'CREDIT' ? 'Crédito' : 'Débito' }}
+            </mat-chip>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="enrollForm" class="enroll-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Número de Validación</mat-label>
+        <input matInput
+               type="text"
+               formControlName="validationNumber"
+               placeholder="000"
+               maxlength="3"
+               autocomplete="off">
+        <mat-icon matSuffix>lock</mat-icon>
+        <mat-hint>Ingrese el código de 3 dígitos que recibió</mat-hint>
+        <mat-error>{{ getValidationNumberError() }}</mat-error>
+      </mat-form-field>
+
+      <div class="info-message">
+        <mat-icon color="primary">info</mat-icon>
+        <p>El número de validación se envió por SMS al teléfono registrado o está impreso en su tarjeta física.</p>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button 
+            (click)="onCancel()"
+            [disabled]="isEnrolling">
+      Cancelar
+    </button>
+    <button mat-raised-button 
+            color="primary"
+            (click)="onEnroll()"
+            [disabled]="isEnrolling || enrollForm.invalid">
+      <mat-icon *ngIf="isEnrolling">hourglass_empty</mat-icon>
+      <mat-icon *ngIf="!isEnrolling">check_circle</mat-icon>
+      {{ isEnrolling ? 'Activando...' : 'Activar Tarjeta' }}
+    </button>
+  </div>
+</div>

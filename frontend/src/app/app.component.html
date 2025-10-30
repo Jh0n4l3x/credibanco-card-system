@@ -1,0 +1,40 @@
+<!-- Barra de navegación principal -->
+<mat-toolbar color="primary" class="app-toolbar">
+  <mat-toolbar-row>
+    <span class="app-title">
+      <mat-icon>credit_card</mat-icon>
+      {{ title }}
+    </span>
+    
+    <span class="spacer"></span>
+    
+    <nav class="nav-links">
+      <a mat-button routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        Dashboard
+      </a>
+      <a mat-button routerLink="/cards" routerLinkActive="active">
+        <mat-icon>credit_card</mat-icon>
+        Tarjetas
+      </a>
+      <a mat-button routerLink="/transactions" routerLinkActive="active">
+        <mat-icon>receipt</mat-icon>
+        Transacciones
+      </a>
+    </nav>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- Contenido principal -->
+<main class="main-content">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+  <div class="container">
+    <p>&copy; 2025 Credibanco. Sistema de Gestión de Tarjetas v1.0.0</p>
+  </div>
+</footer>

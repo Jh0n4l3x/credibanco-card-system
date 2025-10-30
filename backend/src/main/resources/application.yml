@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: credibanco-card-system
+  
+  # Selección del perfil activo - cambiar según necesites:
+  # test: H2 con persistencia en archivo
+  # dev: MySQL local (localhost:3306)
+  profiles:
+    active: test
+  
+  # JPA/Hibernate Configuration estándar
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging Configuration  
+logging:
+  level:
+    com.credibanco.cardsystem: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+
+# Application specific properties
+app:
+  name: Credibanco Card System
+  version: 1.0.0
+  description: Sistema de gestión de tarjetas de Credibanco

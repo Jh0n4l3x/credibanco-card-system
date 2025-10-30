@@ -1,0 +1,219 @@
+.card-create-container {
+  padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  
+  mat-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    mat-card-header {
+      margin-bottom: 2rem;
+      
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #1976d2;
+        
+        mat-icon {
+          font-size: 1.5rem;
+        }
+      }
+    }
+    
+    .card-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      
+      .full-width {
+        width: 100%;
+      }
+
+      .pan-field-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+
+        .pan-field {
+          flex: 1;
+          
+          input {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #1976d2;
+            background-color: #f5f5f5;
+          }
+        }
+
+        .regenerate-btn {
+          margin-top: 8px;
+          
+          mat-icon {
+            transition: transform 0.3s ease;
+          }
+          
+          &:hover mat-icon {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+      .card-preview {
+        margin: 1rem 0;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fafafa;
+
+        .preview-label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          font-weight: 500;
+          color: #666;
+
+          mat-icon {
+            font-size: 1.2rem;
+          }
+        }
+
+        .card-display {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;
+          padding: 1.5rem;
+          color: white;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          min-height: 120px;
+          position: relative;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: rotate(45deg);
+          }
+
+          .card-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+          }
+
+          .card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+
+            .issuer {
+              font-weight: 500;
+              font-size: 0.9rem;
+            }
+
+            mat-chip {
+              background-color: rgba(255, 255, 255, 0.2) !important;
+              color: white !important;
+              border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+          }
+        }
+      }
+      
+      .card-type-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        
+        mat-icon {
+          font-size: 1.2rem;
+          
+          &[aria-label="credit_card"] {
+            color: #1976d2;
+          }
+          
+          &[aria-label="payment"] {
+            color: #388e3c;
+          }
+        }
+      }
+      
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+        
+        button {
+          min-width: 120px;
+          
+          mat-icon {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+            
+            &[aria-label="refresh"] {
+              animation: spin 1s linear infinite;
+            }
+          }
+          
+          &[color="primary"] {
+            background-color: #1976d2;
+            
+            &:disabled {
+              background-color: #ccc;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .card-create-container {
+    padding: 0.5rem;
+    
+    .form-actions {
+      flex-direction: column-reverse;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Estilos para mensajes de error
+::ng-deep {
+  .success-snackbar {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+  
+  .error-snackbar {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+}

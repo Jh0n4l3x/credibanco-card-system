@@ -1,0 +1,247 @@
+# ===================================================================
+# 🏦 CREDIBANCO CARD SYSTEM - .gitignore
+# ===================================================================
+# Ignores para proyecto full-stack: Backend (Java/Maven) + Frontend (Angular)
+# Actualizado: 30 de octubre de 2025
+# ===================================================================
+
+# -------------------------------------------------------------------
+# 🔧 BACKEND - JAVA/MAVEN/SPRING BOOT
+# -------------------------------------------------------------------
+
+# Maven
+backend/target/
+backend/pom.xml.tag
+backend/pom.xml.releaseBackup
+backend/pom.xml.versionsBackup
+backend/pom.xml.next
+backend/release.properties
+backend/dependency-reduced-pom.xml
+backend/buildNumber.properties
+backend/.mvn/timing.properties
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Gradle (si se usa en el futuro)
+backend/.gradle
+backend/build/
+backend/!gradle/wrapper/gradle-wrapper.jar
+backend/!**/src/main/**/build/
+backend/!**/src/test/**/build/
+
+# Java
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# Spring Boot
+backend/application-*.yml
+backend/application-*.properties
+!backend/src/main/resources/application.yml
+!backend/src/main/resources/application-*.yml
+backend/spring.log
+
+# Base de datos
+backend/data/
+backend/*.db
+backend/*.h2.db
+backend/*.mv.db
+backend/*.trace.db
+
+# IDE - IntelliJ IDEA
+backend/.idea/
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+backend/out/
+
+# IDE - Eclipse
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings
+backend/.springBeans
+backend/.sts4-cache
+
+# -------------------------------------------------------------------
+# 🎨 FRONTEND - ANGULAR/NODE.JS
+# -------------------------------------------------------------------
+
+# Dependencias
+frontend/node_modules/
+frontend/jspm_packages/
+
+# Build Angular
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+
+# Angular CLI cache
+frontend/.angular/
+
+# NPM/Yarn
+frontend/.npm
+frontend/.yarn/cache
+frontend/.yarn/unplugged
+frontend/.yarn/build-state.yml
+frontend/.yarn/install-state.gz
+frontend/.pnp.*
+frontend/yarn-error.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/lerna-debug.log*
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output/
+frontend/*.lcov
+
+# TypeScript
+frontend/*.tsbuildinfo
+
+# ESLint cache
+frontend/.eslintcache
+
+# -------------------------------------------------------------------
+# 🌍 VARIABLES DE ENTORNO Y CONFIGURACIÓN
+# -------------------------------------------------------------------
+
+# Variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Configuración específica del proyecto
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-prod.yml
+frontend/src/environments/environment.local.ts
+frontend/src/environments/environment.prod.ts
+
+# -------------------------------------------------------------------
+# 📊 LOGS Y REPORTES
+# -------------------------------------------------------------------
+
+# Logs generales
+logs/
+*.log
+*.log.*
+
+# Logs específicos del proyecto
+backend/logs/
+frontend/logs/
+credibanco-*.log
+
+# Reportes de testing
+backend/target/surefire-reports/
+backend/target/failsafe-reports/
+frontend/coverage/
+frontend/e2e/reports/
+
+# -------------------------------------------------------------------
+# 💻 IDE Y HERRAMIENTAS DE DESARROLLO
+# -------------------------------------------------------------------
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vscode-test
+
+# JetBrains IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# -------------------------------------------------------------------
+# 🚀 DEPLOYMENT Y CI/CD
+# -------------------------------------------------------------------
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Kubernetes
+k8s-local/
+
+# CI/CD temporales
+.github/workflows/temp/
+deployment-temp/
+
+# -------------------------------------------------------------------
+# 📦 DEPENDENCIAS Y CACHE
+# -------------------------------------------------------------------
+
+# Cache general
+.cache/
+.parcel-cache/
+.temp/
+
+# OS específicos
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# -------------------------------------------------------------------
+# 🔒 SEGURIDAD Y DATOS SENSIBLES
+# -------------------------------------------------------------------
+
+# Credenciales
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# Datos de prueba sensibles
+test-data-prod/
+backup-prod/
+
+# -------------------------------------------------------------------
+# 📝 DOCUMENTACIÓN TEMPORAL
+# -------------------------------------------------------------------
+
+# Documentación temporal
+docs/temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# -------------------------------------------------------------------
+# ⚡ OPTIMIZACIÓN Y PERFORMANCE
+# -------------------------------------------------------------------
+
+# Análisis de bundle
+frontend/stats.json
+frontend/webpack-bundle-analyzer-report.html
+
+# Profiling
+*.prof
+*.heap
+
+# ===================================================================
+# FIN DEL ARCHIVO
+# ===================================================================

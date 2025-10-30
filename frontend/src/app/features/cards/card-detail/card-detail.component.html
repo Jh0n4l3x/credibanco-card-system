@@ -1,0 +1,157 @@
+<div class="card-detail-container">
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando información de la tarjeta...</p>
+  </div>
+
+  <div *ngIf="!isLoading && card" class="card-detail-content">
+    <!-- Información de la tarjeta -->
+    <mat-card class="card-info">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>credit_card</mat-icon>
+          Información de la Tarjeta
+        </mat-card-title>
+        <div class="header-actions">
+          <button mat-icon-button (click)="goBack()" matTooltip="Volver">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="card-details-grid">
+          <div class="detail-item">
+            <span class="label">PAN:</span>
+            <span class="value pan-value">{{ card.maskedPan }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Titular:</span>
+            <span class="value">{{ card.holderName }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Documento:</span>
+            <span class="value">{{ card.documentNumber }}</span>
+          </div>
+          
+          <div class="detail-item" *ngIf="card.phoneNumber">
+            <span class="label">Teléfono:</span>
+            <span class="value">{{ card.phoneNumber }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Tipo:</span>
+            <span class="value">
+              <mat-chip [color]="card.cardType === 'CREDIT' ? 'primary' : 'accent'">
+                <mat-icon>{{ card.cardType === 'CREDIT' ? 'credit_card' : 'payment' }}</mat-icon>
+                {{ card.cardType === 'CREDIT' ? 'Crédito' : 'Débito' }}
+              </mat-chip>
+            </span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Estado:</span>
+            <span class="value">
+              <mat-chip [color]="getStatusColor(card.status)">
+                <mat-icon>{{ getStatusIcon(card.status) }}</mat-icon>
+                {{ card.status }}
+              </mat-chip>
+            </span>
+          </div>
+          
+          <div class="detail-item" *ngIf="card.identifier">
+            <span class="label">Identificador:</span>
+            <span class="value">{{ card.identifier }}</span>
+          </div>
+          
+          <div class="detail-item" *ngIf="card.createdAt">
+            <span class="label">Fecha de Creación:</span>
+            <span class="value">{{ card.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-raised-button 
+                color="primary" 
+                (click)="toggleEnrollForm()"
+                [disabled]="!canEnroll()"
+                *ngIf="card.status === 'CREATED'">
+          <mat-icon>how_to_reg</mat-icon>
+          Activar Tarjeta
+        </button>
+        
+        <button mat-raised-button 
+                color="warn" 
+                (click)="deactivateCard()">
+          <mat-icon>block</mat-icon>
+          Desactivar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Transacciones -->
+    <mat-card class="transactions-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>receipt</mat-icon>
+          Transacciones ({{ transactions.length }})
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div *ngIf="transactions.length === 0" class="no-transactions">
+          <mat-icon>inbox</mat-icon>
+          <p>No hay transacciones registradas para esta tarjeta</p>
+        </div>
+        
+        <div *ngIf="transactions.length > 0" class="transactions-list">
+          <mat-accordion multi="false">
+            <mat-expansion-panel *ngFor="let transaction of transactions">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="transaction-header">
+                    <span class="amount">{{ transaction.totalAmount | currency:'COP':'symbol':'1.0-0' }}</span>
+                    <mat-chip [color]="transaction.status === 'APPROVED' ? 'success' : 
+                                     transaction.status === 'CANCELLED' ? 'warn' : 'danger'">
+                      {{ transaction.status }}
+                    </mat-chip>
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ transaction.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              
+              <div class="transaction-details">
+                <div class="detail-item">
+                  <span class="label">Referencia:</span>
+                  <span class="value">{{ transaction.referenceNumber || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Dirección de Compra:</span>
+                  <span class="value">{{ transaction.purchaseAddress }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Estado:</span>
+                  <span class="value">{{ transaction.status }}</span>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!isLoading && !card" class="not-found">
+    <mat-icon>error</mat-icon>
+    <h2>Tarjeta no encontrada</h2>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al listado
+    </button>
+  </div>
+</div>

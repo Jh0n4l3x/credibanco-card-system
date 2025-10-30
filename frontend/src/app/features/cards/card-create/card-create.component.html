@@ -1,0 +1,114 @@
+<div class="card-create-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>add_card</mat-icon>
+        Crear Nueva Tarjeta
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="card-form">
+        <!-- PAN Generado Automáticamente -->
+        <div class="pan-field-container">
+          <mat-form-field appearance="outline" class="pan-field">
+            <mat-label>PAN (Generado Automáticamente)</mat-label>
+            <input matInput formControlName="pan" readonly>
+            <mat-icon matSuffix>credit_card</mat-icon>
+            <mat-hint>{{ getPANInfo().issuer }} - {{ getPANInfo().type }}</mat-hint>
+          </mat-form-field>
+          <button mat-icon-button 
+                  type="button"
+                  color="primary"
+                  (click)="generateNewPAN()"
+                  matTooltip="Generar nuevo PAN"
+                  class="regenerate-btn">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+
+        <!-- Previsualización de la tarjeta -->
+        <div class="card-preview" *ngIf="cardForm.get('pan')?.value">
+          <div class="preview-label">
+            <mat-icon>preview</mat-icon>
+            Vista previa de la tarjeta:
+          </div>
+          <div class="card-display">
+            <div class="card-number">{{ getMaskedPAN() }}</div>
+            <div class="card-info">
+              <span class="issuer">{{ getPANInfo().issuer }}</span>
+              <mat-chip [color]="cardForm.get('cardType')?.value === 'CREDIT' ? 'primary' : 'accent'">
+                {{ getPANInfo().type }}
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Nombre del titular -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del titular</mat-label>
+          <input matInput formControlName="holderName" placeholder="Juan Pérez">
+          <mat-hint>Nombre completo del titular de la tarjeta</mat-hint>
+          <mat-error *ngIf="cardForm.get('holderName')?.invalid && cardForm.get('holderName')?.touched">
+            {{ getErrorMessage('holderName') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Número de documento -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Número de documento</mat-label>
+          <input matInput formControlName="documentNumber" placeholder="12345678" minlength="10" maxlength="15">
+          <mat-hint>Documento de identidad del titular</mat-hint>
+          <mat-error *ngIf="cardForm.get('documentNumber')?.invalid && cardForm.get('documentNumber')?.touched">
+            {{ getErrorMessage('documentNumber') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Teléfono (opcional) -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Teléfono (opcional)</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="+57 300 123 4567">
+          <mat-hint>Número de contacto del titular</mat-hint>
+          <mat-error *ngIf="cardForm.get('phoneNumber')?.invalid && cardForm.get('phoneNumber')?.touched">
+            {{ getErrorMessage('phoneNumber') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Tipo de tarjeta -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tipo de tarjeta</mat-label>
+          <mat-select formControlName="cardType">
+            <mat-option *ngFor="let type of cardTypes" [value]="type">
+              <div class="card-type-option">
+                <!-- <mat-icon>{{ type === 'CREDIT' ? 'credit_card' : 'payment' }}</mat-icon> -->
+                {{ type === 'CREDIT' ? 'Tarjeta de Crédito' : 'Tarjeta de Débito' }}
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="cardForm.get('cardType')?.invalid && cardForm.get('cardType')?.touched">
+            {{ getErrorMessage('cardType') }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button mat-raised-button 
+                  type="button" 
+                  (click)="onCancel()"
+                  [disabled]="isLoading">
+            Cancelar
+          </button>
+          
+          <button mat-raised-button 
+                  color="primary" 
+                  type="submit"
+                  [disabled]="isLoading || cardForm.invalid">
+            <mat-icon *ngIf="isLoading">refresh</mat-icon>
+            <mat-icon *ngIf="!isLoading">save</mat-icon>
+            {{ isLoading ? 'Creando...' : 'Crear Tarjeta' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
