@@ -1,0 +1,19 @@
+app = "CHANGE_ME_credibanco_cards"
+
+[build]
+  image = "" # Leave empty to build using local Dockerfile. flyctl will build the Dockerfile in this directory.
+
+[env]
+# Optional: set JAVA_OPTS or other env vars here
+# JAVA_OPTS = "-Xmx256m"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    port = 443
